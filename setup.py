@@ -44,7 +44,7 @@ setup(
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            "SatScript=SatScript.main:main"
+            "SatScript=saturation.main:main"
         ]
     },
     include_package_data=True,

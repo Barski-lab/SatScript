@@ -10,7 +10,7 @@ from saturation.utils import (normalize_args, export_to_file, get_macs_command_l
 def get_parser():
     parser = argparse.ArgumentParser(description='SatScript', add_help=True)
     parser.add_argument("-b", "--bam",        type=str, help="Path to the BAM file",   required=True)
-    parser.add_argument("-m", "--macs",       type=str, help="Path to the MACS2 file", required=True)
+    parser.add_argument("-m", "--macs",       type=str, help="Path to the MACS2 log file", required=True)
     parser.add_argument("-f", "--file",       type=str, help="Output filename. If not absolute, resolve relative to the current directory", default="Satur.txt")
     parser.add_argument("-p", "--percentage", type=str, help="Target percentage", nargs="*", default=["25", "50", "75", "90", "95", "98", "99", "99.5", "100"])
     parser.add_argument("-t", "--temp",       type=str, help="Temp folder", default=".")
