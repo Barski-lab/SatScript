@@ -1,0 +1,5 @@
+# SatScript
+
+Requirements:
+- MACS2
+
