@@ -1,5 +1,5 @@
 # SatScript
 
-Requirenment:
+Requirements:
 - MACS2
 
