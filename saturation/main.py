@@ -13,9 +13,10 @@ def get_parser():
     parser.add_argument("-m", "--macs",       type=str, help="Path to the MACS2 log file", required=True)
     parser.add_argument("-o", "--output",     type=str, help="Output filename prefix", default="./")
     parser.add_argument("-s", "--suffix",     type=str, help="Output suffixes for reads, islands, surface and saturation files", nargs=4,
-                        default=["reads.png", "islands.png", "surface.png", "saturation.txt"])
+                                              default=["reads.png", "islands.png", "surface.png", "saturation.txt"])
     parser.add_argument("-p", "--percentage", type=str, help="Target percentage", nargs="*", default=["25", "50", "75", "90", "95", "98", "99", "99.5", "100"])
     parser.add_argument("-t", "--temp",       type=str, help="Temp folder", default=".")
+    parser.add_argument("-r", "--resolution", type=int, help="Output picture resolution, dpi", default=85)
     return parser
 
 
@@ -28,6 +29,7 @@ def export_results(args, output_data):
     surface = [line[4] for line in output_data]
 
     save_plot(filename=args.output + args.suffix[0],
+              res_dpi=args.resolution,
               title="Reads",
               x_data=percent,
               y_data=[total_mapped, macs2_reads],
@@ -36,6 +38,7 @@ def export_results(args, output_data):
               axis=["%", "reads"])
 
     save_plot(filename=args.output + args.suffix[1],
+              res_dpi=args.resolution,
               title="Islands",
               x_data=percent,
               y_data=[islands],
@@ -44,6 +47,7 @@ def export_results(args, output_data):
               axis=["%", "islands"])
 
     save_plot(filename=args.output + args.suffix[2],
+              res_dpi=args.resolution,
               title="Surface",
               x_data=percent,
               y_data=[surface],
@@ -58,7 +62,7 @@ def main(argsl=None):
     if argsl is None:
         argsl = sys.argv[1:]
     args,_ = get_parser().parse_known_args(argsl)
-    args = normalize_args(args, ["percentage", "suffix", "output"])
+    args = normalize_args(args, ["percentage", "suffix", "output", "resolution"])
 
     print (args)
     macs_command_line = get_macs_command_line(args.macs)
