@@ -39,8 +39,8 @@ setup(
     license='Apache-2.0',
     packages=find_packages(),
     install_requires=[
-        "argparse==1.2.1",
-        "matplotlib==2.2.2"
+        "argparse",
+        "matplotlib"
     ],
     zip_safe=False,
     entry_points={

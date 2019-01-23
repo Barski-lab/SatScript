@@ -31,7 +31,7 @@ def get_macs_command_line(macs_log, exclude_args=["-t", "-n", "-f"]):
     return " ".join(macs_command)
 
 
-def parse_macs_log(xlsfile, target_percent):
+def parse_outputs(xlsfile, bedmap_output, target_percent):
     ttags, ftags, islands_n, islands_len, istart = 0, 0, 0, 0, 0
     result = [float(target_percent)]
     for line in open_file(xlsfile):
@@ -43,7 +43,9 @@ def parse_macs_log(xlsfile, target_percent):
             islands_n = islands_n + 1
             istart = int(line.strip().split()[1])
             islands_len = islands_len + int(line.strip().split()[2]) - istart
-    result.extend([ttags, ftags, islands_n, islands_len])
+    for line in open_file(bedmap_output):
+        frip_score = float(line) / ttags if ttags != 0 else 0
+    result.extend([ttags, ftags, islands_n, islands_len, frip_score])
     return result
 
 
