@@ -93,7 +93,10 @@ def main(argsl=None):
             print("Run:", callpeak_cmd)
             os.system(callpeak_cmd)
 
-            bedmap_cmd = " ".join(["bedmap --fraction-ref 1 --count", randsample_output, callpeak_output + "_peaks.broadPeak", "| paste -s -d+ - | bc > ", bedmap_output])
+            broad_peak_file = callpeak_output + "_peaks.broadPeak"
+            narrow_peak_file = callpeak_output + "_peaks.narrowPeak"
+            peak_file = broad_peak_file if os.path.exists(broad_peak_file) else narrow_peak_file
+            bedmap_cmd = " ".join(["bedmap --fraction-ref 1 --count", randsample_output, peak_file, "| paste -s -d+ - | bc > ", bedmap_output])
             print("Run:", bedmap_cmd)
             os.system(bedmap_cmd)
 
