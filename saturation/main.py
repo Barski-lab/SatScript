@@ -63,7 +63,8 @@ def export_results(args, output_data):
               y_data=[frip_score],
               labels=["FRIP Score"],
               styles=["bo-"],
-              axis=["%", "FRIP Score"])
+              axis=["%", "FRIP Score, %"],
+              y_max=100)
 
     export_to_file(args.output + args.suffix[4], "\n".join([" ".join(map(str, line)) for line in output_data]))
 
@@ -96,7 +97,7 @@ def main(argsl=None):
             broad_peak_file = callpeak_output + "_peaks.broadPeak"
             narrow_peak_file = callpeak_output + "_peaks.narrowPeak"
             peak_file = broad_peak_file if os.path.exists(broad_peak_file) else narrow_peak_file
-            bedmap_cmd = " ".join(["bedmap --fraction-ref 1 --count", randsample_output, peak_file, "| paste -s -d+ - | bc > ", bedmap_output])
+            bedmap_cmd = " ".join(["bedmap --bp-ovr 1 --count", randsample_output, peak_file, " | awk '{s=($1>0)?s+1:s}; END{print s}' > ", bedmap_output])
             print("Run:", bedmap_cmd)
             os.system(bedmap_cmd)
 

@@ -44,7 +44,7 @@ def parse_outputs(xlsfile, bedmap_output, target_percent):
             istart = int(line.strip().split()[1])
             islands_len = islands_len + int(line.strip().split()[2]) - istart
     for line in open_file(bedmap_output):
-        frip_score = float(line) / ttags if ttags != 0 else 0
+        frip_score = float(line) / ttags * 100 if ttags != 0 else 0
     result.extend([ttags, ftags, islands_n, islands_len, frip_score])
     return result
 
@@ -59,9 +59,9 @@ def normalize_args(args, skip_list=[]):
     return argparse.Namespace (**normalized_args)
 
 
-def save_plot(filename, x_data, y_data, styles, labels, axis, res_dpi=100, title="", padding=[5, 5]):
-    x_max = max(x_data)
-    y_max = max([max(y_data_line) for y_data_line in y_data])
+def save_plot(filename, x_data, y_data, styles, labels, axis, res_dpi=100, title="", padding=[5, 5], x_max=None, y_max=None):
+    x_max = x_max if x_max else max(x_data)
+    y_max = y_max if y_max else max([max(y_data_line) for y_data_line in y_data])
     x_pad = 0.01 * padding[0] * x_max
     y_pad = 0.01 * padding[1] * y_max
 
@@ -75,7 +75,7 @@ def save_plot(filename, x_data, y_data, styles, labels, axis, res_dpi=100, title
     plt.ylabel(axis[1])
     plt.legend(handles=handles)
     plt.axis([0 - x_pad, x_max + x_pad, 0 - y_pad, y_max + y_pad])
-    plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
+    plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 3))
     plt.savefig(filename, bbox_inches='tight', dpi=res_dpi)
     plt.close('all')
 
