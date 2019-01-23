@@ -32,7 +32,7 @@ def get_macs_command_line(macs_log, exclude_args=["-t", "-n", "-f"]):
 
 
 def parse_outputs(xlsfile, bedmap_output, target_percent):
-    ttags, ftags, islands_n, islands_len, istart = 0, 0, 0, 0, 0
+    ttags, ftags, islands_n, islands_len, frip_score, istart = 0, 0, 0, 0, 0, 0
     result = [float(target_percent)]
     for line in open_file(xlsfile):
         if "# total tags in treatment" in line:
