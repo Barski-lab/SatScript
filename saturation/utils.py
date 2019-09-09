@@ -31,8 +31,8 @@ def get_macs_command_line(macs_log, exclude_args=["-t", "-n", "-f"]):
     return " ".join(macs_command)
 
 
-def parse_macs_log(xlsfile, target_percent):
-    ttags, ftags, islands_n, islands_len, istart = 0, 0, 0, 0, 0
+def parse_outputs(xlsfile, bedmap_output, target_percent):
+    ttags, ftags, islands_n, islands_len, frip_score, istart = 0, 0, 0, 0, 0, 0
     result = [float(target_percent)]
     for line in open_file(xlsfile):
         if "# total tags in treatment" in line:
@@ -43,7 +43,9 @@ def parse_macs_log(xlsfile, target_percent):
             islands_n = islands_n + 1
             istart = int(line.strip().split()[1])
             islands_len = islands_len + int(line.strip().split()[2]) - istart
-    result.extend([ttags, ftags, islands_n, islands_len])
+    for line in open_file(bedmap_output):
+        frip_score = float(line) / ttags * 100 if ttags != 0 else 0
+    result.extend([ttags, ftags, islands_n, islands_len, frip_score])
     return result
 
 
@@ -57,9 +59,9 @@ def normalize_args(args, skip_list=[]):
     return argparse.Namespace (**normalized_args)
 
 
-def save_plot(filename, x_data, y_data, styles, labels, axis, title="", padding=[5, 5]):
-    x_max = max(x_data)
-    y_max = max([max(y_data_line) for y_data_line in y_data])
+def save_plot(filename, x_data, y_data, styles, labels, axis, res_dpi=100, title="", padding=[5, 5], x_max=None, y_max=None):
+    x_max = x_max if x_max else max(x_data)
+    y_max = y_max if y_max else max([max(y_data_line) for y_data_line in y_data])
     x_pad = 0.01 * padding[0] * x_max
     y_pad = 0.01 * padding[1] * y_max
 
@@ -73,8 +75,8 @@ def save_plot(filename, x_data, y_data, styles, labels, axis, title="", padding=
     plt.ylabel(axis[1])
     plt.legend(handles=handles)
     plt.axis([0 - x_pad, x_max + x_pad, 0 - y_pad, y_max + y_pad])
-    plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
-    plt.savefig(filename, bbox_inches='tight', dpi=150)
+    plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 3))
+    plt.savefig(filename, bbox_inches='tight', dpi=res_dpi)
     plt.close('all')
 
 
